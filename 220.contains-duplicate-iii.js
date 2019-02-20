@@ -1,0 +1,81 @@
+/*
+ * @lc app=leetcode id=220 lang=javascript
+ *
+ * [220] Contains Duplicate III
+ *
+ * https://leetcode.com/problems/contains-duplicate-iii/description/
+ *
+ * algorithms
+ * Medium (19.38%)
+ * Total Accepted:    85.2K
+ * Total Submissions: 439.8K
+ * Testcase Example:  '[1,2,3,1]\n3\n0'
+ *
+ * Given an array of integers, find out whether there are two distinct indices
+ * i and j in the array such that the absolute difference between nums[i] and
+ * nums[j] is at most t and the absolute difference between i and j is at most
+ * k.
+ * 
+ * 
+ * Example 1:
+ * 
+ * 
+ * Input: nums = [1,2,3,1], k = 3, t = 0
+ * Output: true
+ * 
+ * 
+ * 
+ * Example 2:
+ * 
+ * 
+ * Input: nums = [1,0,1,1], k = 1, t = 2
+ * Output: true
+ * 
+ * 
+ * 
+ * Example 3:
+ * 
+ * 
+ * Input: nums = [1,5,9,1,5,9], k = 2, t = 3
+ * Output: false
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @param {number} t
+ * @return {boolean}
+ */
+var containsNearbyAlmostDuplicate = function(nums, k, t) {
+  if (k < 0 || t < 0) {
+    return false;
+  }
+
+  for (let lo = 0, hi = 0, map = new Map(); lo < nums.length; lo++) {
+    for (; hi < nums.length && hi - lo <= k; hi++) {
+      if (map.has(nums[hi])) {
+        return true;
+      }
+
+      map.set(nums[hi], hi);
+
+      if (lo === hi) {
+        continue;
+      }
+
+      if ([...map].some(([k, v]) => v < hi && Math.abs(nums[hi] - k) <= t)) {
+        return true;
+      }
+    }
+
+    if (map.get(nums[lo]) === lo) {
+      map.delete(nums[lo]);
+    }
+  }
+
+  return false;
+};
